@@ -10,7 +10,7 @@ def get_for_win(player_number):
 
 class Player:
     def __init__(self, player_type, player_number):
-        self.player_type = True
+        self.player_type = player_type
         self.player_number = player_number
         self.walls_amount = 10
         self.current_position = self._set_start_position()
