@@ -86,6 +86,19 @@ class Player:
         if self.walls_amount != 0:
             self.walls_amount -= 1
 
+    def set_places_to_move(self, game_field, list_of_players=None,
+                           list_of_possible_moves=None, another_player=None,
+                           flag=False):
+        if not flag:
+            if self.player_number == list_of_players[0].player_number:
+                another_player = list_of_players[1]
+            else:
+                another_player = list_of_players[0]
+        if not flag:
+            list_of_possible_moves = []
+
+        return list_of_possible_moves
+
     def set_next_position(self, coordinate):
         for places in self.places_to_move:
             if coordinate.is_correct and coordinate.x == places.x and coordinate.y == places.y:
