@@ -1,6 +1,6 @@
 import sys
 
-from CLI.OutputWriter import print_field, send_jump, send_move, win_message
+from CLI.OutputWriter import print_field, send_jump, send_move, win_message, send_wall
 from CLI.InputReader import do as do
 from GameObjects.FieldCoord import FieldCoord
 from GameObjects.GameField import GameField
