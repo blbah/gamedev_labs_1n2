@@ -1,3 +1,7 @@
+from pathfinding.core.diagonal_movement import DiagonalMovement
+from pathfinding.core.grid import Grid
+from pathfinding.finder.a_star import AStarFinder
+
 field_nums = [100, 49, 49, 100, 0, 0]
 
 
@@ -64,6 +68,7 @@ def field_preparation(field):
 class GameField:
     def __init__(self):
         self.field = self.get_start_field()
+        self.graph = self.set_graph()
 
     def game_over(self):
         return True if 1 in self.field[0] or 2 in self.field[-1] else False
@@ -72,8 +77,39 @@ class GameField:
     def get_start_field():
         return field_preparation(fill_the_field())
 
+    def set_graph(self):
+        grid = Grid(matrix=self.graph_prepare(self.field))
+        return grid
+
     def path_finder(self, players):
-        pass
+        grid = self.graph
+        fp_way = False
+        sp_way = False
+
+        for win in players[0].for_win:
+            grid.cleanup()
+            start = grid.node(players[0].current_position.y, players[0].current_position.x)
+            end = grid.node(win[1], win[0])
+
+            finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
+            path, runs = finder.find_path(start, end, grid)
+            if len(path) >= 2:
+                fp_way = True
+                break
+        for win in players[1].for_win:
+            grid.cleanup()
+            start = grid.node(players[1].current_position.y, players[1].current_position.x)
+            end = grid.node(win[1], win[0])
+
+            finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
+            path, runs = finder.find_path(start, end, grid)
+            if len(path) >= 2:
+                sp_way = True
+                break
+        if fp_way and sp_way:
+            return True
+        else:
+            return False
 
     @staticmethod
     def graph_prepare(field):
