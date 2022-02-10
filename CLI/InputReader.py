@@ -1,4 +1,14 @@
 from GameObjects.FieldCoord import FieldCoord
+from Bot.AI import *
+
+
+def choose_color():
+    color = input()
+    return 1 if color == "1" else 2
+
+
+def choose_mode():
+    return input()
 
 
 def do(player, types, field=None, players_list=None):
@@ -14,16 +24,28 @@ def do(player, types, field=None, players_list=None):
 
 
 def wall_case(player):
-    return player.action[1]
+    if player.player_type:
+        return player.action[1]
+    elif not player.player_type:
+        return put_wall()
+        pass
 
 
 def move_case(player):
-    return player.action[1]
+    if player.player_type:
+        return player.action[1]
+    elif not player.player_type:
+        return move(player)
+        pass
 
 
 def choose_case(player, field, players_list):
-    player.action = shift_player(input().split(" "))
-    return player.action[0]
+    if player.player_type:
+        player.action = shift_player(input().split(" "))
+        return player.action[0]
+    elif not player.player_type:
+        return choose(player, field, players_list)
+        pass
 
 
 def shift_player(temp):
