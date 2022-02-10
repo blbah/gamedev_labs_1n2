@@ -82,3 +82,8 @@ def send_move(player):
 def send_jump(player):
     print(f"jump {chr(int(player.current_position.y / 2 + 96) + 1).capitalize()}"
           f"{int(player.current_position.x / 2) + 1}")
+
+def win_message(player, field):
+    print_field(field)
+    print(f"The player number {player.player_number} won!")
+    pass
