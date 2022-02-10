@@ -1,3 +1,5 @@
+import copy
+
 from infinity import inf
 
 from GameObjects.FieldCoord import FieldCoord
@@ -88,5 +90,40 @@ def all_walls(game_field, player_one, player_two, path_to_win):
     return game_fields
 
 
+def all_walls(game_field, player_one, player_two, path_to_win):
+    game_fields = []
+    if player_one.walls_amount > 0:
+        walls = []
+        del path_to_win[0::2]
+        for wall in path_to_win:
+            if wall[0] % 2 == 0:
+                if wall[0] - 2 >= 0:
+                    walls.append(Wall(FieldCoord(wall[1], wall[0]), FieldCoord(wall[1], wall[0] - 2), game_field))
+                if wall[0] + 2 <= 16:
+                    walls.append(Wall(FieldCoord(wall[1], wall[0]), FieldCoord(wall[1], wall[0] + 2), game_field))
+            else:
+                if wall[1] - 2 >= 0:
+                    walls.append(Wall(FieldCoord(wall[1], wall[0]), FieldCoord(wall[1] - 2, wall[0]), game_field))
+                if wall[1] + 2 <= 16:
+                    walls.append(Wall(FieldCoord(wall[1], wall[0]), FieldCoord(wall[1] + 2, wall[0]), game_field))
 
+    return game_fields
+
+
+def all_moves(field, first_player, second_player, way):
+    game_fields = []
+    tem_field = copy.deepcopy(field)
+    tem_player = copy.deepcopy(first_player)
+    tem_two_player = copy.deepcopy(second_player)
+    tem_player.set_places_to_move(field, [tem_player, tem_two_player])
+    ind = -1
+    for index, step in enumerate(tem_player.places_to_move):
+        if step.x == way[2][1] and step.y == way[2][0]:
+            ind = index
+            break
+    tem_player.set_next_position(tem_player.places_to_move[ind])
+    if tem_player.can_move_here:
+        tem_field.move_player(tem_player)
+        game_fields.append((tem_field, tem_player, tem_two_player, tem_player.next_position))
+    return game_fields
 
