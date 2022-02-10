@@ -1,9 +1,11 @@
 import sys
 
-from CLI.OutputWriter import print_field, send_jump, send_move
+from CLI.OutputWriter import print_field, send_jump, send_move, win_message
 from CLI.InputReader import do as do
+from GameObjects.FieldCoord import FieldCoord
 from GameObjects.GameField import GameField
 from GameObjects.Player import Player
+from GameObjects.Wall import Wall, if_there_path_to_win
 
 
 def start():
@@ -16,7 +18,9 @@ def start():
     while not player_one.is_win() or not player_two.is_win():
         game(list_of_players[counter], game_field, list_of_players)
         if player_one.is_win() or player_two.is_win():
-            sys.exit()
+            sys.exit(win_message(player_one if player_one.is_win()
+                                 else player_two, game_field.field))
+        game_field.graph = game_field.set_graph()
         moves += 1
         counter = 1 if counter == 0 else 0
     sys.exit()
@@ -45,6 +49,41 @@ def player_move(player, game_field, list_of_players):
             player_move(player, game_field, list_of_players)
     except Exception:
         pass
+
+def set_wall(player, game_field, list_of_players, counter=0):
+    if counter < 5:
+        if player.walls_amount > 0:
+            wall_input = do(player, "wall")
+            if wall_input == "back":
+                game(player, game_field, list_of_players)
+            else:
+                coordinates_split = wall_input.split(" ")
+                if len(coordinates_split) == 4:
+                    try:
+                        coordinates = [int(coordinate) for coordinate in coordinates_split]
+                        wall = Wall(FieldCoord(coordinates[0], coordinates[1]),
+                                    FieldCoord(coordinates[2], coordinates[3]), game_field)
+                        first = if_there_path_to_win(game_field, list_of_players[0],
+                                                     list_of_players[1], wall)
+                        second = wall.between_two_pares
+                        third = wall.is_there_another_wall
+                        if first and second and not third:
+                            game_field.set_wall(wall)
+                            player.decrease_wall_amount()
+                            if player.player_type is False:
+                                send_wall(wall)
+                        else:
+                            set_wall(player, game_field, list_of_players, counter + 1)
+                    except Exception:
+                        set_wall(player, game_field, list_of_players, counter + 1)
+                else:
+                    set_wall(player, game_field, list_of_players, counter + 1)
+        else:
+            game(player, game_field, list_of_players)
+    else:
+        # print(counter)
+        sys.exit()
+
 
 def game(player, game_field, list_of_players):
     print_field(game_field.field)
