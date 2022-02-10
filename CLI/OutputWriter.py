@@ -5,6 +5,43 @@ symbols = ["\033[32m {}".format(" "),
            "\033[33m {}".format("∎"),
            "\033[33m {}".format("#")]
 
+
+def print_field(field):
+    a = 1
+    if a == 0:
+        horizontal(field)
+        rows(field)
+    else:
+        for index, i in enumerate(field):
+            for index2, j in enumerate(i):
+                print(symbols[j], end="")
+            print()
+    pass
+
+
+def horizontal(field):
+    num_horizontal = "    "
+    counter = 0
+    for _ in field[0]:
+        if counter < 10:
+            num_horizontal += f"{counter}  "
+            counter += 1
+        else:
+            num_horizontal += f"{counter} "
+            counter += 1
+    print(num_horizontal)
+
+    num_horizontal = "     "
+    counter = 0
+    for item in field[0]:
+        if item == 0 or item == 1 or item == 2:
+            num_horizontal += f"{counter}"
+            counter += 1
+        else:
+            num_horizontal += "     "
+    print(num_horizontal)
+
+
 def rows(field):
     counter_1 = 0
     counter_2 = 0
@@ -27,17 +64,21 @@ def rows(field):
                 print(f"{counter_2}  {row}")
                 counter_2 += 1
 
-def horizontal(field):
-    a = 1
-    if a == 0:
-        horizontal(field)
-        rows(field)
+
+def send_wall(wall):
+    if wall.coordinates_start.x == wall.coordinates_end.x:
+        print(f"wall {chr(int(wall.coordinates_middle.y / 2 + 96 + 19)).capitalize()}"
+              f"{int((wall.coordinates_middle.x + 1) / 2)}h")
     else:
-        for index, i in enumerate(field):
-            for index2, j in enumerate(i):
-                print(symbols[j], end="")
-            print()
-    pass
+        print(f"wall {chr(int(wall.coordinates_middle.y / 2 + 96 + 19)).capitalize()}"
+              f"{int((wall.coordinates_middle.x + 1) / 2)}v")
 
 
+def send_move(player):
+    print(f"move {chr(int(player.current_position.y / 2 + 96) + 1).capitalize()}"
+          f"{int(player.current_position.x / 2) + 1}")
 
+
+def send_jump(player):
+    print(f"jump {chr(int(player.current_position.y / 2 + 96) + 1).capitalize()}"
+          f"{int(player.current_position.x / 2) + 1}")
