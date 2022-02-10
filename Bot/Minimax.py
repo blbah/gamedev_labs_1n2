@@ -1,5 +1,7 @@
 from infinity import inf
 
+from GameObjects.FieldCoord import FieldCoord
+from GameObjects.Wall import Wall
 
 counter = 0
 
@@ -65,6 +67,26 @@ def minimax(obj_minimax, depth, alpha, beta, maximizingPlayer, first_player, sec
 def evaluation(minim):
     minim.minimax_eval = len(minim.player_one_path) - len(minim.player_two_path)
     return minim.minimax_eval, minim
+
+def all_walls(game_field, player_one, player_two, path_to_win):
+    game_fields = []
+    if player_one.walls_amount > 0:
+        walls = []
+        del path_to_win[0::2]
+        for wall in path_to_win:
+            if wall[0] % 2 == 0:
+                if wall[0] - 2 >= 0:
+                    walls.append(Wall(FieldCoord(wall[1], wall[0]), FieldCoord(wall[1], wall[0] - 2), game_field))
+                if wall[0] + 2 <= 16:
+                    walls.append(Wall(FieldCoord(wall[1], wall[0]), FieldCoord(wall[1], wall[0] + 2), game_field))
+            else:
+                if wall[1] - 2 >= 0:
+                    walls.append(Wall(FieldCoord(wall[1], wall[0]), FieldCoord(wall[1] - 2, wall[0]), game_field))
+                if wall[1] + 2 <= 16:
+                    walls.append(Wall(FieldCoord(wall[1], wall[0]), FieldCoord(wall[1] + 2, wall[0]), game_field))
+
+    return game_fields
+
 
 
 
