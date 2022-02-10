@@ -1,9 +1,16 @@
 import copy
+import time
 
 from infinity import inf
+from pathfinding.core.diagonal_movement import DiagonalMovement
+from pathfinding.finder.a_star import AStarFinder
 
 from GameObjects.FieldCoord import FieldCoord
+<<<<<<< HEAD
 from GameObjects.Wall import Wall
+=======
+from GameObjects.Wall import Wall, if_there_path_to_win
+>>>>>>> b38b5745ebf0d768f998af408605fe7c0392c97d
 
 
 counter = 0
@@ -37,7 +44,7 @@ def minimax(obj_minimax, depth, alpha, beta, maximizingPlayer, first_player, sec
     global counter
     counter += 1
     if depth == 0:
-        path_first, path_second = None
+        path_first, path_second = paths_to_win(obj_minimax.game_field, first_player, second_player)
         path_first = min(path_first, key=len)
         path_second = min(path_second, key=len)
         obj_minimax.player_one_path = path_first
@@ -46,7 +53,7 @@ def minimax(obj_minimax, depth, alpha, beta, maximizingPlayer, first_player, sec
 
     if type(obj_minimax) != Minimax:
         obj_minimax = Minimax(copy.deepcopy(obj_minimax), first_player, second_player, action=None, depth=depth)
-    path_first, path_second = None
+    path_first, path_second = paths_to_win(obj_minimax.game_field, first_player, second_player)
     path_first = min(path_first, key=len)
     path_second = min(path_second, key=len)
     obj_minimax.player_one_path = path_first
@@ -86,7 +93,38 @@ def evaluation(minim):
     minim.minimax_eval = len(minim.player_one_path) - len(minim.player_two_path)
     return minim.minimax_eval, minim
 
+<<<<<<< HEAD
+=======
 
+def paths_to_win(game_field, first_player, second_player):
+    grid = game_field.graph
+    paths_for_first = []
+    paths_for_second = []
+    for win_position in first_player.for_win:
+        grid.cleanup()
+        start = grid.node(first_player.current_position.y, first_player.current_position.x)
+        end = grid.node(win_position[1], win_position[0])
+
+        finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
+        path, runs = finder.find_path(start, end, grid)
+        if len(path) >= 2:
+            paths_for_first.append(path)
+    for win_position in second_player.for_win:
+        grid.cleanup()
+        start = grid.node(second_player.current_position.y, second_player.current_position.x)
+        end = grid.node(win_position[1], win_position[0])
+>>>>>>> b38b5745ebf0d768f998af408605fe7c0392c97d
+
+        finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
+        path, runs = finder.find_path(start, end, grid)
+        if len(path) >= 2:
+            paths_for_second.append(path)
+
+    return paths_for_first, paths_for_second
+
+
+<<<<<<< HEAD
+=======
 def all_walls(game_field, player_one, player_two, path_to_win):
     game_fields = []
     if player_one.walls_amount > 0:
@@ -104,9 +142,22 @@ def all_walls(game_field, player_one, player_two, path_to_win):
                 if wall[1] + 2 <= 16:
                     walls.append(Wall(FieldCoord(wall[1], wall[0]), FieldCoord(wall[1] + 2, wall[0]), game_field))
 
+        for wall in walls:
+            first = if_there_path_to_win(game_field, player_one, player_two, wall)
+            second = wall.between_two_pares
+            third = wall.is_there_another_wall
+            four = wall.is_length_correct
+            if first and second and not third and four:
+                temp_field = copy.deepcopy(game_field)
+                temp_field.set_wall(wall)
+                temp_player = copy.deepcopy(player_one)
+                temp_player.decrease_wall_amount()
+                game_fields.append((temp_field, temp_player, player_two, wall))
+
     return game_fields
 
 
+>>>>>>> b38b5745ebf0d768f998af408605fe7c0392c97d
 def all_moves(field, first_player, second_player, way):
     game_fields = []
     tem_field = copy.deepcopy(field)
