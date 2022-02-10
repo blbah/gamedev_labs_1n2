@@ -1,4 +1,5 @@
 import copy
+import time
 
 from infinity import inf
 
@@ -6,6 +7,16 @@ from GameObjects.FieldCoord import FieldCoord
 from GameObjects.Wall import Wall
 
 counter = 0
+
+def get_time(function):
+    def measure_time(*args, **kw):
+        start = time.time()
+        result = function(*args, **kw)
+        print("Time of %s(): is %.4f sec 😢"
+              % (function.__qualname__, time.time() - start))
+        return result
+
+    return measure_time
 
 
 def run_minimax(game_field, depth, alpha, beta, maximizingPlayer, player_one, player_two):
