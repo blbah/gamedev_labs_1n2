@@ -2,6 +2,7 @@ from infinity import inf
 
 from Bot import Minimax
 from GameObjects.Wall import Wall
+from Bot.Minimax import get_time
 
 
 def put_wall():
@@ -18,6 +19,7 @@ def move(player):
             return index + 1
 
 
+@get_time
 def choose(player, field, players_list):
     bot_doing = Minimax.run_minimax(field, depth=2, alpha=-inf, beta=+inf,
                                     maximizingPlayer=True, player_one=player,
