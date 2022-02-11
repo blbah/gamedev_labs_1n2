@@ -7,6 +7,7 @@ symbols = ["\033[32m {}".format(" "),
 
 
 def choose_play_mode():
+    return
     print("Choose play mode:"
           "\n1) Human VS Human"
           "\n2) Human VS Bot"
@@ -15,6 +16,7 @@ def choose_play_mode():
 
 
 def choose_your_color():
+    return
     print("Choose your color:"
           "\n1) White"
           "\n2) Black")
@@ -22,12 +24,14 @@ def choose_your_color():
 
 
 def win_message(player, field):
+    return
     print_field(field)
     print(f"The player number {player.player_number} won!")
     pass
 
 
 def print_field(field):
+    return
     a = 1
     if a == 0:
         horizontal(field)
@@ -41,6 +45,7 @@ def print_field(field):
 
 
 def horizontal(field):
+    return
     num_horizontal = "    "
     counter = 0
     for _ in field[0]:
@@ -64,6 +69,7 @@ def horizontal(field):
 
 
 def rows(field):
+    return
     counter_1 = 0
     counter_2 = 0
     for row in field:

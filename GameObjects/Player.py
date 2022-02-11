@@ -39,20 +39,16 @@ class Player:
                           self.current_position.y + 2)
 
     def check_up(self, field):
-        return field[self.current_position.x - 1]
-        [self.current_position.y] == 3
+        return field[self.current_position.x - 1][self.current_position.y] == 3
 
     def check_down(self, field):
-        return field[self.current_position.x + 1]
-        [self.current_position.y] == 3
+        return field[self.current_position.x + 1][self.current_position.y] == 3
 
     def check_right(self, field):
-        return field[self.current_position.x]
-        [self.current_position.y + 1] == 3
+        return field[self.current_position.x][self.current_position.y + 1] == 3
 
     def check_left(self, field):
-        return field[self.current_position.x]
-        [self.current_position.y - 1] == 3
+        return field[self.current_position.x][self.current_position.y - 1] == 3
 
     def player_check_up(self, field, second_player):
         return self.current_position.x - 2 == second_player.x \

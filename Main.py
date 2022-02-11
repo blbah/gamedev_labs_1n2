@@ -11,31 +11,38 @@ from CLI.InputReader import do, choose_mode, choose_color
 
 def start():
     game_field = GameField()
-    choose_play_mode()
-    mode = choose_mode()
-    if mode == "1":
-        player_one = Player(True, 1)
-        player_two = Player(True, 2)
-    elif mode == "2":
-        choose_your_color()
-        color = int(choose_color())
-        player_one = Player(True, color)
-        player_two = Player(False, 3 - color)
-    else:
-        player_one = Player(False, 1)
-        player_two = Player(False, 2)
+    # choose_play_mode()
+    # mode = choose_mode()
+    # if mode == "1":
+    #     player_one = Player(True, 1)
+    #     player_two = Player(True, 2)
+    # elif mode == "2":
+    #     choose_your_color()
+    #     color = int(choose_color())
+    #     player_one = Player(True, color)
+    #     player_two = Player(False, 3 - color)
+    # else:
+    #     player_one = Player(False, 1)
+    #     player_two = Player(False, 2)
+    color = 2
+    if input() == ("white" or "White"):
+        color = 1
+    player_one = Player(color != 1, 1)
+    player_two = Player(color == 1, 2)
     list_of_players = [player_one, player_two]
     counter = 0
     moves = 0
     while not player_one.is_win() or not player_two.is_win():
         game(list_of_players[counter], game_field, list_of_players)
         if player_one.is_win() or player_two.is_win():
-            sys.exit(win_message(player_one if player_one.is_win()
-                                 else player_two, game_field.field))
+            # sys.exit(win_message(player_one if player_one.is_win()
+            #                      else player_two, game_field.field))
+            start()
         game_field.graph = game_field.set_graph()
         moves += 1
         counter = 1 if counter == 0 else 0
-    sys.exit()
+    # sys.exit()
+    start()
 
 
 def set_wall(player, game_field, list_of_players, counter=0):
@@ -61,6 +68,9 @@ def set_wall(player, game_field, list_of_players, counter=0):
                             if player.player_type is False:
                                 send_wall(wall)
                         else:
+                            if third:
+                                game(player, game_field, list_of_players)
+                                return
                             set_wall(player, game_field, list_of_players, counter + 1)
                     except Exception:
                         set_wall(player, game_field, list_of_players, counter + 1)
@@ -100,7 +110,7 @@ def player_move(player, game_field, list_of_players):
 
 
 def game(player, game_field, list_of_players):
-    print_field(game_field.field)
+    # print_field(game_field.field)
     game_input = do(player, "choose", game_field, list_of_players)
     if game_input == "1":
         player_move(player, game_field, list_of_players)

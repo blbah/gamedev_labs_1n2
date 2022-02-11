@@ -1,0 +1,1 @@
+Quoridor.AiTester.exe --command Main.exe

@@ -16,6 +16,7 @@ def get_time(function):
     def measure_time(*args, **kw):
         start = time.time()
         result = function(*args, **kw)
+        return result
         print("Time of %s(): is %.4f sec 😢"
               % (function.__qualname__, time.time() - start))
         return result
@@ -26,7 +27,7 @@ def get_time(function):
 def run_minimax(game_field, depth, alpha, beta, maximizingPlayer, player_one, player_two):
     evl, act = minimax(game_field, depth, alpha, beta, maximizingPlayer, player_one, player_two)
     global counter
-    print(counter)
+    # print(counter)
     counter = 0
     for kid in act.child:
         if kid.minimax_eval == evl:

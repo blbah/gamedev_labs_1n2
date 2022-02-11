@@ -39,9 +39,9 @@ class Wall:
                    game_field.field[self.coordinates_end.x + 1][self.coordinates_start.y] in [0, 1, 2]
 
     def _if_there_another_wall(self, game_field):
-        return not game_field[self.coordinates_start.x][self.coordinates_start.y] == 3 and \
-                   game_field[self.coordinates_end.x][self.coordinates_end.y] == 3 and \
-                   game_field[self.coordinates_middle.x][self.coordinates_middle.y] == 5
+        return game_field[self.coordinates_start.x][self.coordinates_start.y] == 4 or \
+               game_field[self.coordinates_end.x][self.coordinates_end.y] == 4 or \
+               game_field[self.coordinates_middle.x][self.coordinates_middle.y] == 4
 
     def set_coordinates_middle(self):
         if self.coordinates_start.y == self.coordinates_end.y:
